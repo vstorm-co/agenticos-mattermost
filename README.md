@@ -17,10 +17,12 @@ A live Mattermost installation has not yet been used for acceptance testing.
 Use the AgenticOS version containing PR #2805; the plugin uses its channel and
 agent-exposure APIs. Publish the agent before connecting it.
 
-1. Build with Go, Python 3 and Make: `make check bundle` in this repository. The build selects the pinned Go 1.26.11 toolchain, downloading it into Go
-   caches if needed; it does not replace your system Go. The SDK and dependency
-   checksums are pinned in `go.mod` and `go.sum`.
-2. Upload `dist/co.vstorm.agenticos-0.1.0.tar.gz` in **System Console → Plugins →
+1. Download `co.vstorm.agenticos-0.1.0.tar.gz` and `SHA256SUMS` from
+   [GitHub Releases](https://github.com/vstorm-co/agenticos-mattermost/releases/latest).
+   Verify the checksum with `sha256sum --check SHA256SUMS` (Linux) or
+   `shasum -a 256 -c SHA256SUMS` (macOS). No Go installation is needed to install
+   the published bundle. Building from source is described below.
+2. Upload `co.vstorm.agenticos-0.1.0.tar.gz` in **System Console → Plugins →
    Plugin Management**, then enable **AgenticOS**. Your server must allow plugin
    uploads, bot account creation and bot access tokens. Keep ordinary users'
    personal access tokens disabled if you do not otherwise need them.
@@ -105,9 +107,12 @@ API; they do not prove that a live Mattermost installation delivers messages.
 
 `make bundle` cross-compiles both architectures and validates the archive's
 manifest, executable permissions, ELF architecture headers and bundled logo.
-CI repeats these checks and publishes an installable build artifact.
-Download it from a successful [CI run](https://github.com/vstorm-co/agenticos-mattermost/actions/workflows/ci.yml),
-or build it locally.
+Installable published bundles and checksums live in
+[GitHub Releases](https://github.com/vstorm-co/agenticos-mattermost/releases).
+CI also publishes development artifacts for successful builds.
+To build from source, run `make check bundle` with Go, Python 3 and Make. The
+build selects pinned Go 1.26.11, downloading it into Go caches if needed without
+replacing your system Go. The archive is written to `dist/`.
 The plugin is not submitted to the Mattermost Marketplace and its bundle is not
 signed. Install only an artifact built from reviewed source.
 
